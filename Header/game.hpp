@@ -21,6 +21,9 @@ private:
     chrono::microseconds maze_2_duration;
     chrono::microseconds maze_3_duration;
 
+    chrono::high_resolution_clock::time_point start_time;
+    bool maze_in_progress;
+
     sf::Event event;
 
     sf::RenderWindow window;

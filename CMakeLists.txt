@@ -1,10 +1,12 @@
 cmake_minimum_required(VERSION 3.15)
 project(MazeGenerator LANGUAGES CXX)
 
-# Find SFML
-find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Set source files
+# Tell CMake to find SFML via config mode
+find_package(SFML 2.5 CONFIG REQUIRED COMPONENTS graphics window system)
+
 set(SOURCES
     src/main.cpp
     src/game.cpp
@@ -14,20 +16,24 @@ set(SOURCES
     src/drawText.cpp
 )
 
-# Include directories (BOTH relative and absolute paths)
-include_directories(
+add_executable(maze_generator ${SOURCES})
+
+target_include_directories(maze_generator PRIVATE
     ${CMAKE_SOURCE_DIR}/Header
     ${CMAKE_SOURCE_DIR}
 )
 
-# Add executable
-add_executable(maze_generator ${SOURCES})
+# Link imported SFML targets (correct for MSVC)
+target_link_libraries(maze_generator PRIVATE
+    sfml-graphics
+    sfml-window
+    sfml-system
+)
 
-# Link libraries
-target_link_libraries(maze_generator PRIVATE sfml-graphics sfml-window sfml-system)
-
-# C++17 standard
-target_compile_features(maze_generator PRIVATE cxx_std_17)
-
-# Copy assets
-file(COPY ${CMAKE_SOURCE_DIR}/Images DESTINATION ${CMAKE_BINARY_DIR})
+# Copy assets - use add_custom_command to copy during build
+add_custom_command(TARGET maze_generator POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_SOURCE_DIR}/Images
+    $<TARGET_FILE_DIR:maze_generator>/Images
+    COMMENT "Copying Images to build directory"
+)

@@ -1,0 +1,91 @@
+﻿{
+  "configurations": [
+    {
+      "name": "Windows-x64-Debug",
+      "generator": "Ninja",
+      "configurationType": "Debug",
+      "inheritEnvironments": [ "msvc_x64_x64" ],
+      "buildRoot": "${projectDir}\\out\\build\\${name}",
+      "installRoot": "${projectDir}\\out\\install\\${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": ""
+    },
+    {
+      "name": "Windows-x64-Release",
+      "generator": "Ninja",
+      "configurationType": "Release",
+      "buildRoot": "${projectDir}\\out\\build\\${name}",
+      "installRoot": "${projectDir}\\out\\install\\${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": "",
+      "inheritEnvironments": [ "msvc_x64_x64" ],
+      "variables": []
+    },
+    {
+      "name": "Linux-Debug",
+      "generator": "Unix Makefiles",
+      "configurationType": "Debug",
+      "buildRoot": "${projectDir}/out/build/${name}",
+      "installRoot": "${projectDir}/out/install/${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": "",
+      "environments": [
+        {
+          "CXX": "g++",
+          "CC": "gcc"
+        }
+      ]
+    },
+    {
+      "name": "Linux-Release",
+      "generator": "Unix Makefiles",
+      "configurationType": "Release",
+      "buildRoot": "${projectDir}/out/build/${name}",
+      "installRoot": "${projectDir}/out/install/${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": "",
+      "environments": [
+        {
+          "CXX": "g++",
+          "CC": "gcc"
+        }
+      ]
+    },
+    {
+      "name": "macOS-Debug",
+      "generator": "Unix Makefiles",
+      "configurationType": "Debug",
+      "buildRoot": "${projectDir}/out/build/${name}",
+      "installRoot": "${projectDir}/out/install/${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": "",
+      "environments": [
+        {
+          "CXX": "clang++",
+          "CC": "clang"
+        }
+      ]
+    },
+    {
+      "name": "macOS-Release",
+      "generator": "Unix Makefiles",
+      "configurationType": "Release",
+      "buildRoot": "${projectDir}/out/build/${name}",
+      "installRoot": "${projectDir}/out/install/${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": "",
+      "environments": [
+        {
+          "CXX": "clang++",
+          "CC": "clang"
+        }
+      ]
+    }
+  ]
+}

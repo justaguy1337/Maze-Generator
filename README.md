@@ -34,28 +34,104 @@ A C++ implementation of four different maze-generation algorithms with real-time
 
 ---
 ## Installation
-### Linux (Ubuntu/Debian)
+
+### Prerequisites
+- C++17 compatible compiler (GCC, Clang, or MSVC)
+- CMake 3.15 or higher
+- SFML 2.5 or higher
+
+### Platform-Specific Setup
+
+#### Linux (Ubuntu/Debian)
 ```bash
+# Install dependencies
+sudo apt update
 sudo apt install libsfml-dev cmake g++
-```
 
-### Windows
-Install SFML through vcpkg or download from [SFML's official site](https://www.sfml-dev.org/)
+# Clone or download the repository
+cd Maze-Generator
 
-### Building
-```bash
+# Build the project
 mkdir build && cd build
-cmake .. -DCMAKE_BUILD_TYPE=Release
+cmake -DCMAKE_BUILD_TYPE=Release ..
 make -j$(nproc)
-```
 
-### Run the compiled executable:
-```bash
+# Run
 ./maze_generator
 ```
 
+#### Linux (Fedora/RHEL)
+```bash
+# Install dependencies
+sudo dnf install SFML-devel cmake gcc-c++
+
+# Build the project
+mkdir build && cd build
+cmake -DCMAKE_BUILD_TYPE=Release ..
+make -j$(nproc)
+
+# Run
+./maze_generator
+```
+
+#### macOS
+```bash
+# Install dependencies via Homebrew
+brew install sfml cmake
+
+# Clone or download the repository
+cd Maze-Generator
+
+# Build the project
+mkdir build && cd build
+cmake -DCMAKE_BUILD_TYPE=Release ..
+make -j$(sysctl -n hw.ncpu)
+
+# Run
+./maze_generator
+```
+
+#### Windows (Visual Studio)
+1. Install [SFML](https://www.sfml-dev.org/download/sfml/2.6.2/) or use vcpkg:
+   ```bash
+   vcpkg install sfml:x64-windows
+   ```
+
+2. Install [CMake](https://cmake.org/download/) and [Visual Studio](https://visualstudio.microsoft.com/)
+
+3. Clone or download the repository
+
+4. Build using VS Code or command line:
+   ```bash
+   mkdir build && cd build
+   cmake -G "Visual Studio 17 2022" ..
+   cmake --build . --config Release
+   ```
+
+5. Run from the build directory:
+   ```bash
+   .\Release\maze_generator.exe
+   ```
+
+### Building with CMake Tools Extension (VS Code)
+
+1. Install the [CMake Tools extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cmake-tools) in VS Code
+2. Open the project folder in VS Code
+3. Select the appropriate build configuration:
+   - Windows: `Windows-x64-Release`
+   - Linux: `Linux-Release`
+   - macOS: `macOS-Release`
+4. Click "Build" in the CMake Tools sidebar
+
 ### Controls
-- Keys 1-4: Switch between algorithms
+- **1-4 Keys**: Switch between algorithms
+- **Window Close Button**: Exit the application
+
+### Real-time Metrics
+The display shows:
+- **Steps**: Number of generation steps completed
+- **Time**: Live elapsed time in milliseconds while generating (updates each frame)
+- **Algorithm Name**: Currently running algorithm
 
 ---
 

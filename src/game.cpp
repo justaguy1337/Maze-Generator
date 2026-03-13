@@ -16,6 +16,7 @@ Game::Game() : window(sf::VideoMode(gbl::SCREEN::RESIZE * gbl::SCREEN::WIDTH, gb
                grid(random_manager)
 {
     has_focus = window.hasFocus();
+    maze_in_progress = false;
 
     window.setView(sf::View(sf::FloatRect(0, 0, gbl::SCREEN::WIDTH, gbl::SCREEN::HEIGHT)));
 
@@ -79,7 +80,21 @@ void Game::draw_stats(const int &i_steps, const int &i_x, const int &i_y,
                       const std::chrono::microseconds &i_duration)
 {
     std::stringstream string_stream;
-    string_stream << std::fixed << std::setprecision(2) << i_duration.count() / 1000.f;
+    
+    // Calculate elapsed time if maze is in progress, otherwise use final duration
+    double elapsed_ms;
+    if (maze_in_progress)
+    {
+        auto now = std::chrono::high_resolution_clock::now();
+        auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(now - start_time);
+        elapsed_ms = elapsed.count() / 1000.0;
+    }
+    else
+    {
+        elapsed_ms = i_duration.count() / 1000.0;
+    }
+    
+    string_stream << std::fixed << std::setprecision(2) << elapsed_ms;
 
     // Get algorithm name based on current_algorithm
     std::string algo_name;
@@ -122,18 +137,26 @@ void Game::handle_events()
             if (event.key.code == sf::Keyboard::Num1)
             {
                 current_algorithm = 0;
+                start_time = std::chrono::high_resolution_clock::now();
+                maze_in_progress = true;
             }
             else if (event.key.code == sf::Keyboard::Num2)
             {
                 current_algorithm = 1;
+                start_time = std::chrono::high_resolution_clock::now();
+                maze_in_progress = true;
             }
             else if (event.key.code == sf::Keyboard::Num3)
             {
                 current_algorithm = 2;
+                start_time = std::chrono::high_resolution_clock::now();
+                maze_in_progress = true;
             }
             else if (event.key.code == sf::Keyboard::Num4)
             {
                 current_algorithm = 3;
+                start_time = std::chrono::high_resolution_clock::now();
+                maze_in_progress = true;
             }
             break;
 
@@ -148,23 +171,29 @@ void Game::update()
 
     for (char a = 0; a < gbl::MAP::STEPS_PER_FRAME; a++)
     {
+        bool is_generating = false;
         switch (current_algorithm)
         {
         case 0:
-            grid.update_maze_generator(0, maze_0_steps, maze_0_duration);
+            is_generating = grid.update_maze_generator(0, maze_0_steps, maze_0_duration);
             break;
         case 1:
-            grid.update_maze_generator(1, maze_1_steps, maze_1_duration);
+            is_generating = grid.update_maze_generator(1, maze_1_steps, maze_1_duration);
             break;
         case 2:
-            grid.update_maze_generator(2, maze_2_steps, maze_2_duration);
+            is_generating = grid.update_maze_generator(2, maze_2_steps, maze_2_duration);
             break;
         case 3:
-            grid.update_maze_generator(3, maze_3_steps, maze_3_duration);
+            is_generating = grid.update_maze_generator(3, maze_3_steps, maze_3_duration);
             break;
 
         default:
             break;
+        }
+        
+        if (!is_generating)
+        {
+            maze_in_progress = false;
         }
     }
 }

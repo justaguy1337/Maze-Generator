@@ -29,36 +29,24 @@ Grid::Grid(RandomManager &i_random_manager) : maze_2_counter(1),
 			maze_3_map[a].push_back(Cell(a, b));
 		}
 
-	// Generate unique random starting positions for each algorithm
+	// All algorithms now start at position (0,0)
 	int starts[4][2]; // Stores staring[x,y] for each algorithm's start
 
-	// Algorithm 0 (Backtracker)
-	starts[0][0] = random_manager->get_random(gbl::MAP::COLUMNS - 1, 0);
-	starts[0][1] = random_manager->get_random(gbl::MAP::ROWS - 1, 0);
+	// Algorithm 0 (Backtracker) - starts at (0,0)
+	starts[0][0] = 0;
+	starts[0][1] = 0;
 
-	// Algorithm 1 (Prim's) - ensure different from 0
-	do
-	{
-		starts[1][0] = random_manager->get_random(gbl::MAP::COLUMNS - 1, 0);
-		starts[1][1] = random_manager->get_random(gbl::MAP::ROWS - 1, 0);
-	} while (starts[1][0] == starts[0][0] && starts[1][1] == starts[0][1]);
+	// Algorithm 1 (Prim's) - starts at (0,0)
+	starts[1][0] = 0;
+	starts[1][1] = 0;
 
-	// Algorithm 2 (Wilson's) - ensure different from 0 and 1
-	do
-	{
-		starts[2][0] = random_manager->get_random(gbl::MAP::COLUMNS - 1, 0);
-		starts[2][1] = random_manager->get_random(gbl::MAP::ROWS - 1, 0);
-	} while ((starts[2][0] == starts[0][0] && starts[2][1] == starts[0][1]) ||
-			 (starts[2][0] == starts[1][0] && starts[2][1] == starts[1][1]));
+	// Algorithm 2 (Wilson's) - starts at (0,0)
+	starts[2][0] = 0;
+	starts[2][1] = 0;
 
-	// Algorithm 3 (Aldous-Broder) - ensure different from 0,1,2
-	do
-	{
-		starts[3][0] = random_manager->get_random(gbl::MAP::COLUMNS - 1, 0);
-		starts[3][1] = random_manager->get_random(gbl::MAP::ROWS - 1, 0);
-	} while ((starts[3][0] == starts[0][0] && starts[3][1] == starts[0][1]) ||
-			 (starts[3][0] == starts[1][0] && starts[3][1] == starts[1][1]) ||
-			 (starts[3][0] == starts[2][0] && starts[3][1] == starts[2][1]));
+	// Algorithm 3 (Aldous-Broder) - starts at (0,0)
+	starts[3][0] = 0;
+	starts[3][1] = 0;
 
 	// Initialize Algorithm 0 (Backtracker)
 	maze_0_stack.push(&maze_0_map[starts[0][0]][starts[0][1]]);
@@ -177,7 +165,7 @@ void Grid::draw(const char &i_maze_index, const int &i_position_x, const int &i_
 		}
 }
 
-void Grid::update_maze_generator(const char &i_maze_index, int &i_maze_steps, std::chrono::microseconds &maze_duration)
+bool Grid::update_maze_generator(const char &i_maze_index, int &i_maze_steps, std::chrono::microseconds &maze_duration)
 {
 	if (i_maze_index == 0) // The Backtracking Algorithm
 	{
@@ -213,7 +201,9 @@ void Grid::update_maze_generator(const char &i_maze_index, int &i_maze_steps, st
 			i_maze_steps++;
 
 			maze_duration += std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - start_time);
+			return true;
 		}
+		return false;
 	}
 	else if (i_maze_index == 1) // The Randomized Prim's Algorithm
 	{
@@ -252,7 +242,9 @@ void Grid::update_maze_generator(const char &i_maze_index, int &i_maze_steps, st
 			i_maze_steps++;
 
 			maze_duration += std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - start_time);
+			return true;
 		}
+		return false;
 	}
 	else if (i_maze_index == 2) // Wilson's Algorithm
 	{
@@ -340,7 +332,9 @@ void Grid::update_maze_generator(const char &i_maze_index, int &i_maze_steps, st
 			i_maze_steps++;
 
 			maze_duration += std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - start_time);
+			return true;
 		}
+		return false;
 	}
 	else if (i_maze_index == 3) // The Aldous-Broder Algorithm
 	{
@@ -383,8 +377,11 @@ void Grid::update_maze_generator(const char &i_maze_index, int &i_maze_steps, st
 			i_maze_steps++;
 
 			maze_duration += std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - start_time);
+			return true;
 		}
+		return false;
 	}
+	return false;
 }
 
 std::vector<Cell *> Grid::get_available_neighbors(const bool &i_get_checked, const char &i_maze_index, const Cell &i_cell)
